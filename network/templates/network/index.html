@@ -1,0 +1,47 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<h2>All Posts </h2>
+{% if user.is_authenticated %}
+<div style="border-style:solid; padding:25px; border-color:black; border-width:3px;" >
+    <h4>New Post</h4>
+    <form action="{% url 'new_post' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control"  name="description" >
+        </div>
+        <input class="btn btn-primary" type="submit" value="Post">
+    </form>
+</div>
+{% endif %}
+{% for post in page_obj %}
+<div style="border-style:solid; padding:25px; border-color:black; border-width:3px;" >
+    <h5><a href= "{% url 'profile' post.poster.id%}">
+        {{ post.poster }}
+        </a>
+    </h5>
+    {% if post.poster == viewer %}
+    <div>
+        <a href= "{% url 'edit_post' post.id%}"> Edit </a>
+    </div>
+    {% endif %}
+    <div>
+        {{ post.description }}
+    </div>
+    <div>
+        {{ post.created_date }}
+    </div>
+    <div>
+        <a href = "{% url 'like' post.id%}">
+            
+            {% if viewer in post.liked_post.all %}
+                <p style="color:red">&hearts; {{ post.likes }}<p></p>
+            {% else %}
+            <p style="color:black">&hearts; {{ post.likes }}<p></p>
+            {% endif %}
+            
+            </a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

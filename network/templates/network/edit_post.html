@@ -1,0 +1,31 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<div style="border-style:solid; padding:25px; border-color:black; border-width:3px;" >
+    <h5><a href= "{% url 'profile' post.poster.id%}">
+        {{ post.poster }}
+        </a>
+    </h5>
+    <div>
+        <form action="{% url 'edit_post' post.id%}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control"  name="new_description" value="{{ post.description }}" >
+            </div>
+            <input class="btn btn-primary" type="submit" value="Save">
+        </form>
+    </div>
+    <div>
+        {{ post.created_date }}
+    </div>
+    <div>
+        <a href = "{% url 'like' post.id%}">
+            {% if viewer in post.liked_post.all %}
+                <p style="color:red">&hearts; {{ post.likes }}<p></p>
+            {% else %}
+            <p style="color:black">&hearts; {{ post.likes }}<p></p>
+            {% endif %}
+        </a>
+    </div>
+</div>
+{% endblock %}

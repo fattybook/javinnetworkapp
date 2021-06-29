@@ -1,0 +1,48 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<h2>Profile of {{ user.username }}</h2>
+
+<div> Followers: {{ followers }}</div>
+<div> Following: {{ following }}</div>
+
+
+    {% if viewer.id != user.id %}
+    <a href= "{% url 'follow' user.id%}" class="btn btn-primary btn-sm btn-note">
+        {% if boolean == True %}
+            <button>Follow</button>
+        {% else %}
+            <button>Unfollow</button>
+        {% endif %}
+    </a>
+    {% endif %}
+
+    {% for post in page_obj %}
+<div style="border-style:solid; padding:25px; border-color:black; border-width:3px;" >
+    <h5><a href= "{% url 'profile' post.poster.id%}">
+        {{ post.poster }}
+        </a>
+    </h5>
+    {% if post.poster == viewer %}
+    <div>
+        <a href= "{% url 'edit_post' post.id%}"> Edit </a>
+    </div>
+    {% endif %}
+    <div>
+        {{ post.description }}
+    </div>
+    <div>
+        {{ post.created_date }}
+    </div>
+    <div>
+        <a href = "{% url 'like' post.id%}">
+            {% if viewer in post.liked_post.all %}
+                <p style="color:red">&hearts; {{ post.likes }}<p></p>
+            {% else %}
+            <p style="color:black">&hearts; {{ post.likes }}<p></p>
+            {% endif %}
+            </a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
